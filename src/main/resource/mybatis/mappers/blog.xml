@@ -20,4 +20,13 @@
 		]]>
 	</insert>
 
+	<select id="selectBlog" parameterType="String" resultType="BlogVo">
+		<![CDATA[
+			select blogTitle,
+				   logoFile
+			from blog
+			where id = #{id}				   
+		]]>
+	 </select>
+
 </mapper>

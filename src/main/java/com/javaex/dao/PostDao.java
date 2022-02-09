@@ -1,23 +1,23 @@
 package com.javaex.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.javaex.vo.BlogVo;
+import com.javaex.vo.PostVo;
 
 @Repository
-public class BlogDao {
+public class PostDao {
 
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public void insertBlog(BlogVo blogVo) {
-		sqlSession.insert("blog.insertBlog", blogVo);
-	}
-
-	public BlogVo selectBlog(String id) {
-		return sqlSession.selectOne("blog.selectBlog",id);
+	public List<PostVo> selectList(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("post.selectList",map);
 	}
 
 }

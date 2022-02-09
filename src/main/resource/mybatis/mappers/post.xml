@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	
+	
+	<select id="selectList" parameterType="Map" resultType="PostVo">
+		<![CDATA[
+			select postNo,
+			       postTitle,
+			       to_char(p.regDate,'yyyy-mm-dd') regDate
+			from blog b, category c, post p
+			where b.id = c.id and
+			      c.cateNo = p.cateNo and
+			      p.cateNo = #{cateNo} and
+     			  b.id = #{id}
+			order by postNo desc
+		]]>
+	</select>
+
+</mapper>

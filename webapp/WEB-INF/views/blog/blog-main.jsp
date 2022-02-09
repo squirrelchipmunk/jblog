@@ -22,26 +22,22 @@
 				<div id="profile">
 					
 					<!-- 기본이미지 -->
-					<img id="proImg" src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg">
+					<img id="proImg" src="${pageContext.request.contextPath}/assets/images/${map.blogVo.logoFile}">
 					
 					<!-- 사용자업로드 이미지 -->
 					<%-- <img id="proImg" src=""> --%>
 					
-					<div id="nick">정우성(hijava)님</div>
+					<div id="nick">${blogUser.userName}(${blogUser.id})님</div>
 				</div>
 				<div id="cate">
 					<div class="text-left">
 						<strong>카테고리</strong>
 					</div>
 					<ul id="cateList" class="text-left">
-						<li><a href="$}">카테고리5</a></li>
-						<li><a href="$}">카테고리4</a></li>
-						<li><a href="$}">카테고리3</a></li>
-						<li><a href="$}">카테고리2</a></li>
-						<li><a href="$}">카테고리1</a></li>
-						<li><a href="$}">미분류</a></li>
-						
-					</ul>
+						<c:forEach items="${map.categoryList}" var="cateVo">
+							<li class="cateListClass" data-cno="${cateVo.cateNo}"><a href="">${cateVo.cateName}</a></li>
+						</c:forEach>
+					</ul> 
 				</div>
 			</div>
 			<!-- profilecate_area -->
@@ -83,6 +79,7 @@
 							<col style="width: 20%;">
 						</colgroup>
 						
+						<!-- 
 						<tr>
 							<td class="text-left"><a href="">08.페이징</a></td>
 							<td class="text-right">2020/07/23</td>
@@ -91,21 +88,11 @@
 							<td class="text-left"><a href="">07.첨부파일_MultipartResolver</a></td>
 							<td class="text-right">2020/07/23</td>
 						</tr>
-						<tr>
-							<td class="text-left"><a href="">06.jquery_ajax</a></td>
-							<td class="text-right">2020/07/23</td>
-						</tr>
-						<tr>
-							<td class="text-left"><a href="">05.javaScript</a></td>
-							<td class="text-right">2020/07/23</td>
-						</tr>
-						<tr>
-							<td class="text-left"><a href="">04.spring_어플리케이션_아키텍쳐</a></td>
-							<td class="text-right">2020/07/23</td>
-						</tr>
+						 -->
 						
 						
 					</table>
+					
 				</div>
 				<!-- //list -->
 			</div>
@@ -123,4 +110,39 @@
 	</div>
 	<!-- //wrap -->
 </body>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		fetchList();
+	});
+	
+	function fetchList(){
+		var id = '<c:out value="${blogUser.id}"/>';
+		var cateNo = $(".cateListClass").first().data("cno");
+		console.log(id);
+		console.log(cateNo);
+		
+		var reqData ={
+			id:id,
+			cateNo:cateNo
+		}
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/post/list",
+			type : "post",
+			data : reqData,
+			dataType: "json",
+			success : function(postList){
+				console.log(postList);
+				/* for(var post of postList){
+					render(post);
+				} */
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+	}
+</script>
+
 </html>

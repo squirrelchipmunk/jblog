@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaex.service.UserService;
 import com.javaex.vo.UserVo;
@@ -53,6 +55,12 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@ResponseBody
+	@RequestMapping("dupCheck")
+	public boolean dupCheck(@RequestParam("id") String id) {
+		System.out.println("userCon "+id);
+		return userService.dupCheck(id);
+	}
 	
 	
 }
