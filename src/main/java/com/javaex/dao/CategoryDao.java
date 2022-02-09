@@ -21,5 +21,18 @@ public class CategoryDao {
 	public List<CategoryVo> selectCateList(String id) {
 		return sqlSession.selectList("category.selectCateList", id);
 	}
+
+
+	public List<CategoryVo> selectAllDataList(String id) {
+		return sqlSession.selectList("category.selectAllDataList", id);
+	}
+
+	public int selectPostNum(CategoryVo categoryVo) {
+		return sqlSession.selectOne("category.selectPostNum", categoryVo);
+	}
+
+	public int delete(int cateNo) {
+		return sqlSession.delete("category.delete",cateNo);
+	}
 	
 }

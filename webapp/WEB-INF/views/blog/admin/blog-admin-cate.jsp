@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>JBlog</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 
 </head>
 
@@ -15,13 +15,14 @@
 	<div id="wrap">
 		
 		<!-- 개인블로그 해더 -->
+		<c:import url="/WEB-INF/views/includes/blog-header.jsp"></c:import>
 
 
 		<div id="content">
 			<ul id="admin-menu" class="clearfix">
-				<li class="tabbtn selected"><a href="">기본설정</a></li>
-				<li class="tabbtn"><a href="">카테고리</a></li>
-				<li class="tabbtn"><a href="">글작성</a></li>
+				<li class="tabbtn"><a href="${pageContext.request.contextPath}/${blogUser.id}/admin/basic">기본설정</a></li>
+				<li class="tabbtn selected"><a href="${pageContext.request.contextPath}/${blogUser.id}/admin/category">카테고리</a></li>
+				<li class="tabbtn"><a href="${pageContext.request.contextPath}/${blogUser.id}/admin/writeForm">글작성</a></li>
 			</ul>
 			<!-- //admin-menu -->
 			
@@ -46,7 +47,7 @@
 		      		</thead>
 		      		<tbody id="cateList">
 		      			<!-- 리스트 영역 -->
-		      			<tr>
+		      			<%-- <tr>
 							<td>1</td>
 							<td>자바프로그래밍</td>
 							<td>7</td>
@@ -63,7 +64,18 @@
 						    <td class='text-center'>
 						    	<img class="btnCateDel" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
 						    </td>
-						</tr>
+						</tr> --%>
+						<c:forEach items="${categoryList}" var="vo">
+							<tr>
+								<td>${vo.cateNo}</td>
+								<td>${vo.cateName}</td>
+								<td>${vo.postNum}</td>
+								<td>${vo.description}</td>
+							    <td class='text-center'>
+							    	<img class="btnCateDel" data-cno="${vo.cateNo}" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
+							    </td>
+							</tr>
+						</c:forEach>
 						<!-- 리스트 영역 -->
 					</tbody>
 				</table>
@@ -94,6 +106,7 @@
 		
 		
 		<!-- 개인블로그 푸터 -->
+		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"></c:import>
 		
 	
 	
@@ -101,7 +114,35 @@
 	<!-- //wrap -->
 </body>
 
+<script type="text/javascript">
 
+$(".btnCateDel").on("click", function(){
+	console.log($(this).data("cno"));
+	var cateNo = $(this).data("cno");
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/post/list",
+		type : "post",
+		data : {cateNo: cateNo},
+		dataType: "json",
+		success : function(result){
+			
+			if(result == 'success'){
+				
+			}
+			else{ // fail
+				
+			}
+			
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+	});
+	
+});
+
+</script>
 
 
 </html>

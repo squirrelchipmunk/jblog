@@ -22,7 +22,7 @@
 				<div id="profile">
 					
 					<!-- 기본이미지 -->
-					<img id="proImg" src="${pageContext.request.contextPath}/assets/images/${map.blogVo.logoFile}">
+					<img id="proImg" src="${pageContext.request.contextPath}/upload/${blogVo.logoFile}">
 					
 					<!-- 사용자업로드 이미지 -->
 					<%-- <img id="proImg" src=""> --%>
@@ -34,7 +34,7 @@
 						<strong>카테고리</strong>
 					</div>
 					<ul id="cateList" class="text-left">
-						<c:forEach items="${map.categoryList}" var="cateVo">
+						<c:forEach items="${categoryList}" var="cateVo">
 							<li class="cateListClass" data-cno="${cateVo.cateNo}"><a href="">${cateVo.cateName}</a></li>
 						</c:forEach>
 					</ul> 
@@ -47,7 +47,7 @@
 				<div id="postBox" class="clearfix">
 						<div id="postTitle" class="text-left"><strong>08.페이징</strong></div>
 						<div id="postDate" class="text-left"><strong>2020/07/23</strong></div>
-						<div id="postNick">정우성(hijava)님</div>
+						<div id="postNick">${blogUser.userName}(${blogUser.id})님</div>
 				</div>
 				<!-- //postBox -->
 			
@@ -79,6 +79,9 @@
 							<col style="width: 20%;">
 						</colgroup>
 						
+						<tbody id="postList">
+						
+						</tbody>
 						<!-- 
 						<tr>
 							<td class="text-left"><a href="">08.페이징</a></td>
@@ -103,6 +106,8 @@
 		</div>	
 		<!-- //content -->
 		<div class=></div>
+		
+		<!-- 개인블로그 푸터 -->
 		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"></c:import>
 		
 	
@@ -116,11 +121,34 @@
 		fetchList();
 	});
 	
-	function fetchList(){
-		var id = '<c:out value="${blogUser.id}"/>';
-		var cateNo = $(".cateListClass").first().data("cno");
-		console.log(id);
+	$("#postList").on("click", "a" ,function(){
+		console.log($(this).data("pno"));
+		
+		var postNo = $(this).data("pno");
+		renderView(postNo);
+		return false;
+	});
+	
+	$(".cateListClass").on("click", function(){
+		var cateNo = $(this).data("cno");
 		console.log(cateNo);
+		
+		fetchList(cateNo, true);
+		
+		return false;
+	});
+	
+	
+	
+	function fetchList( cateNo = $(".cateListClass").first().data("cno"), changeCate = false ){
+		var id = '<c:out value="${blogUser.id}"/>';
+		//var cateNo = $(".cateListClass").first().data("cno");
+		//console.log(id);
+		//console.log(cateNo);
+		
+		if(changeCate){ // 카테고리 변경 시 포스트리스트 초기화
+			$("#postList").html("");
+		}
 		
 		var reqData ={
 			id:id,
@@ -133,16 +161,62 @@
 			data : reqData,
 			dataType: "json",
 			success : function(postList){
+				
 				console.log(postList);
-				/* for(var post of postList){
-					render(post);
-				} */
+				if(postList.length > 0) {
+					
+					for(var post of postList){
+						render(post);
+					}
+					
+					var firstNo = postList[0].postNo;
+					renderView(firstNo);
+				}
+				else{
+					$("#postTitle").html("<strong>등록된 글이 없습니다.</strong>");
+					$("#postDate").html("");
+					$("#post").html("");
+					$("#postNick").html("");
+				}
+				
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+		
+	}
+	
+	function render(post){
+		var str  = '';
+			str += '<tr>';
+			str += '	<td class="text-left"><a href="" data-pno="'+post.postNo+'">'+post.postTitle+'</a></td>';
+			str += '	<td class="text-right">'+post.regDate+'</td>';
+			str += '</tr>';
+		
+		$("#postList").append(str);
+	}
+	
+	function renderView(postNo){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/post/read",
+			type : "post",
+			data : {postNo: postNo},
+			dataType: "json",
+			success : function(post){
+				console.log(post.postTitle);
+				console.log(post.regDate);
+				$("#postTitle").html("<strong>"+post.postTitle+"</strong>");
+				$("#postDate").html("<strong>"+post.regDate+"</strong>");
+				$("#post").html(post.postContent);
+				
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : " + error);
 			}
 		});
 	}
+	
 </script>
 
 </html>

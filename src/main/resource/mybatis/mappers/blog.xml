@@ -28,5 +28,22 @@
 			where id = #{id}				   
 		]]>
 	 </select>
+	 
+	 <update id="updateImage" parameterType="BlogVo" >
+	 	<![CDATA[
+			update blog
+			set blogTitle = #{blogTitle},
+				logoFile = #{logoFile}
+			where id = #{id}
+		]]>
+	 </update>
+	 
+	 <update id="updateTitle" parameterType="BlogVo" >
+	 	<![CDATA[
+			update blog
+			set blogTitle = #{blogTitle}
+			where id = #{id}
+		]]>
+	 </update>
 
 </mapper>

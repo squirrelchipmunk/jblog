@@ -30,4 +30,11 @@ public class PostController {
 		return list;
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping("/read")
+	public PostVo read(@RequestParam("postNo") int postNo){
+		
+		return postService.read(postNo);
+	}
 }

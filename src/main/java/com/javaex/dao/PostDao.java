@@ -16,8 +16,11 @@ public class PostDao {
 	private SqlSession sqlSession;
 	
 	public List<PostVo> selectList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 		return sqlSession.selectList("post.selectList",map);
+	}
+
+	public PostVo selectPost(int postNo) {
+		return sqlSession.selectOne("post.selectPost",postNo);
 	}
 
 }

@@ -23,5 +23,9 @@ public class PostService {
 		
 		return postDao.selectList(map);
 	}
+
+	public PostVo read(int postNo) {
+		return postDao.selectPost(postNo);
+	}
 	
 }

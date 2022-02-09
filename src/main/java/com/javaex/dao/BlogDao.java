@@ -20,4 +20,13 @@ public class BlogDao {
 		return sqlSession.selectOne("blog.selectBlog",id);
 	}
 
+	public void updateImage(BlogVo blogVo) {
+		sqlSession.update("blog.updateImage", blogVo);
+		
+	}
+
+	public void updateTitle(BlogVo blogVo) {
+		sqlSession.update("blog.updateTitle", blogVo);
+	}
+
 }

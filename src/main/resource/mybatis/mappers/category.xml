@@ -14,7 +14,6 @@
 		]]>
 	</insert>
 	
-	
 	<select id="selectCateList" parameterType="String" resultType="CategoryVo">
 		<![CDATA[
 			select cateNo,
@@ -26,4 +25,34 @@
 		]]>
 	</select>
 
+	
+	<select id="selectAllDataList" parameterType="String" resultType="CategoryVo">
+		<![CDATA[
+			select cateNo,
+				   cateName,
+				   regDate,
+				   description
+			from category
+			where id= #{id}
+			order by regDate desc
+		]]>
+	</select>
+	
+	<select id="selectPostNum" parameterType="CategoryVo" resultType="int">
+		<![CDATA[
+			select count(postNo)
+			from category c, post p
+			where c.cateNo = p.cateNo and
+				  c.cateNo = #{cateNo} and
+				  id = #{id}
+		]]>
+	</select>
+	
+	<delete id="selectCategory" parameterType="int">
+		<![CDATA[
+			delete from category
+			where cateNo = #{cateNo}
+		]]>
+	</delete>
+	
 </mapper>

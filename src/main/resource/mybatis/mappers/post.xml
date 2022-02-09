@@ -17,4 +17,16 @@
 		]]>
 	</select>
 
+	<select id="selectPost" parameterType="int" resultType="PostVo">
+		<![CDATA[
+			select postNo,
+			       postTitle,
+			       postContent,
+			       to_char(p.regDate,'yyyy-mm-dd') regDate
+			from post p
+			where postNo = #{postNo}
+		]]>
+	</select>
+
+
 </mapper>
