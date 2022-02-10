@@ -58,7 +58,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("dupCheck")
 	public boolean dupCheck(@RequestParam("id") String id) {
-		System.out.println("userCon "+id);
 		return userService.dupCheck(id);
 	}
 	

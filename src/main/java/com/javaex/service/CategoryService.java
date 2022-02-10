@@ -26,26 +26,30 @@ public class CategoryService {
 		return categoryDao.selectCateList(id);
 	}
 	
-	public List<CategoryVo> getAllDataList(String id){
-		List<CategoryVo> cateList = categoryDao.selectAllDataList(id);
-		for(CategoryVo vo: cateList) {
-			
-			CategoryVo cVo = new CategoryVo();
-			cVo.setCateNo(vo.getCateNo());
-			cVo.setId(id);
-			int postNum = categoryDao.selectPostNum( cVo );
-			vo.setPostNum(postNum);
-		}
+	public List<CategoryVo> getAdminCateList(String id){
+		List<CategoryVo> cateList = categoryDao.selectAdminCateList(id);
 		
 		return cateList;
 	}
 
 	public String remove(int cateNo) {
 		int count = categoryDao.delete(cateNo);
+		
 		if(count>0)
-			return "seccess";
+			return "success";
 		else
 			return "fail";
+	}
+
+	public CategoryVo add(CategoryVo categoryVo) {
+		categoryDao.insertSelectCate(categoryVo);
+		int cateNo = categoryVo.getCateNo();
+		
+		return categoryDao.selectCategory(cateNo);
+	}
+
+	public List<CategoryVo> getOptCateList(String id) {
+		return categoryDao.selectOptCateList(id);
 	}
 	
 }

@@ -23,4 +23,9 @@ public class PostDao {
 		return sqlSession.selectOne("post.selectPost",postNo);
 	}
 
+	public void insert(PostVo postVo) {
+		sqlSession.insert("post.insert",postVo);
+		
+	}
+
 }

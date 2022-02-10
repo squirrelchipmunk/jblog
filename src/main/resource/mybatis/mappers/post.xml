@@ -6,6 +6,7 @@
 	<select id="selectList" parameterType="Map" resultType="PostVo">
 		<![CDATA[
 			select postNo,
+				   c.cateNo,
 			       postTitle,
 			       to_char(p.regDate,'yyyy-mm-dd') regDate
 			from blog b, category c, post p
@@ -28,5 +29,17 @@
 		]]>
 	</select>
 
+	
+	<insert id="insert" parameterType="PostVo">
+		<![CDATA[
+			insert into post
+			values( seq_post_no.nextval,
+					#{cateNo},
+					#{postTitle},
+					#{postContent},
+					sysdate
+			)
+		]]>
+	</insert>
 
 </mapper>

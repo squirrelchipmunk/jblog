@@ -47,26 +47,8 @@
 		      		</thead>
 		      		<tbody id="cateList">
 		      			<!-- 리스트 영역 -->
-		      			<%-- <tr>
-							<td>1</td>
-							<td>자바프로그래밍</td>
-							<td>7</td>
-							<td>자바기초와 객체지향</td>
-						    <td class='text-center'>
-						    	<img class="btnCateDel" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-						    </td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>오라클</td>
-							<td>5</td>
-							<td>오라클 설치와 sql문</td>
-						    <td class='text-center'>
-						    	<img class="btnCateDel" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-						    </td>
-						</tr> --%>
-						<c:forEach items="${categoryList}" var="vo">
-							<tr>
+						<%-- <c:forEach items="${categoryList}" var="vo">
+							<tr id="tr${vo.cateNo}">
 								<td>${vo.cateNo}</td>
 								<td>${vo.cateName}</td>
 								<td>${vo.postNum}</td>
@@ -75,8 +57,7 @@
 							    	<img class="btnCateDel" data-cno="${vo.cateNo}" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
 							    </td>
 							</tr>
-						</c:forEach>
-						<!-- 리스트 영역 -->
+						</c:forEach> --%>
 					</tbody>
 				</table>
       	
@@ -87,11 +68,11 @@
 					</colgroup>
 		      		<tr>
 		      			<td class="t">카테고리명</td>
-		      			<td><input type="text" name="name" value=""></td>
+		      			<td><input type="text" name="cateName" value=""></td>
 		      		</tr>
 		      		<tr>
 		      			<td class="t">설명</td>
-		      			<td><input type="text" name="desc"></td>
+		      			<td><input type="text" name="description"></td>
 		      		</tr>
 		      	</table> 
 			
@@ -116,31 +97,113 @@
 
 <script type="text/javascript">
 
-$(".btnCateDel").on("click", function(){
-	console.log($(this).data("cno"));
-	var cateNo = $(this).data("cno");
-	
-	$.ajax({
-		url: "${pageContext.request.contextPath}/post/list",
-		type : "post",
-		data : {cateNo: cateNo},
-		dataType: "json",
-		success : function(result){
-			
-			if(result == 'success'){
-				
-			}
-			else{ // fail
-				
-			}
-			
-		},
-		error : function(XHR, status, error) {
-			console.error(status + " : " + error);
-		}
+	$(document).ready(function(){
+		fetchList();
 	});
 	
-});
+	
+	$("#cateList").on("click",".btnCateDel", function(){
+		
+		var cateNo = $(this).data("cno");
+		var postNum = $("#tr"+cateNo).data("pnum");
+
+		if(postNum > 0){
+			alert("삭제할 수 없습니다.");
+			return false;
+		} 
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/category/remove",
+			type : "post",
+			data : {cateNo: cateNo},
+			dataType: "json",
+			success : function(result){
+				//console.log(cateNo);
+				//console.log(result);
+				if(result == 'success'){
+					$("#tr"+cateNo).remove();
+				}
+				else{ // fail
+					alert('삭제 실패');
+				}
+				
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+		
+		
+	});
+	
+	$("#btnAddCate").on("click", function(){
+		var id = '<c:out value="${blogUser.id}"/>';
+		var cateName = $('input[name="cateName"]').val();
+		var description = $('input[name="description"]').val();
+		
+		var cateVo = {
+			id:id,
+			cateName:cateName,
+			description:description
+		}
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/category/add",
+			type : "post",
+			data : cateVo,
+			dataType: "json",
+			success : function(categoryVo){
+				$('input[name="cateName"]').val("");
+				$('input[name="description"]').val("");
+				render(categoryVo, "prepend");
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+	});
+	
+	
+	
+	function fetchList(){
+		var id = '<c:out value="${blogUser.id}"/>';
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/${blogUser.id}/getCateList",
+			type : "post",
+			data : {id: id},
+			dataType: "json",
+			success : function(categoryList){
+				console.log(categoryList);
+				for(var vo of categoryList){
+					render(vo);
+				}
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+	}
+	
+	function render(vo, direction = "append"){
+		str  = '';
+		str += '<tr id="tr'+vo.cateNo+'" data-pnum="'+vo.postNum+'">';
+		str += '	<td>'+vo.cateNo+'</td>';
+		str += '	<td>'+vo.cateName+'</td>';
+		str += '	<td>'+vo.postNum+'</td>';
+		str += '	<td>'+vo.description+'</td>';
+		str += '	<td class="text-center">';
+		str += '		<img class="btnCateDel" data-cno="'+vo.cateNo+'" src="${pageContext.request.contextPath}/assets/images/delete.jpg">';
+		str += '	</td>';
+		str += '</tr>';
+		
+		if(direction == "append"){
+			$("#cateList").append(str);
+		}
+		else{
+			$("#cateList").prepend(str);
+		}
+	}
 
 </script>
 

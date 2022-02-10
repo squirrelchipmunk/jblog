@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,7 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 	
+	/*
 	@ResponseBody
 	@RequestMapping("/list")
 	public List<PostVo> list(@RequestParam("id")String id,
@@ -26,15 +28,20 @@ public class PostController {
 		System.out.println(cateNo);
 		
 		List<PostVo> list = postService.getList(id, cateNo);
-		System.out.println(list);
 		return list;
-	}
-	
+	}*/
 	
 	@ResponseBody
 	@RequestMapping("/read")
 	public PostVo read(@RequestParam("postNo") int postNo){
 		
 		return postService.read(postNo);
+	}
+	
+	@RequestMapping("/add")
+	public String add(@ModelAttribute PostVo postVo,
+					@RequestParam("id")String id) {
+		postService.add(postVo);
+		return "redirect:/"+id+"/admin/writeForm";
 	}
 }

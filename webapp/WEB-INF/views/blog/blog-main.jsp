@@ -35,7 +35,7 @@
 					</div>
 					<ul id="cateList" class="text-left">
 						<c:forEach items="${categoryList}" var="cateVo">
-							<li class="cateListClass" data-cno="${cateVo.cateNo}"><a href="">${cateVo.cateName}</a></li>
+							<li class="cateListClass" data-cno="${cateVo.cateNo}"><a href="${pageContext.request.contextPath}/${blogUser.id}?cateNo=${cateVo.cateNo}">${cateVo.cateName}</a></li>
 						</c:forEach>
 					</ul> 
 				</div>
@@ -71,6 +71,57 @@
 				</div>
 				-->
 				
+				<div id="commentsArea">
+					<table border="1">
+						<colgroup>
+							<col style="width: 10%;">
+							<col style="width: 80%;">
+							<col style="width: 10%;">
+						</colgroup>
+						<tbody id="cmtInput">
+							<c:if test="${!empty authUser}">
+								<tr>
+									<td>${authUser.userName}</td>
+									<td><input  id="cmtContent" type="text" name="cmtContent"></td>
+									<td><button id="cmtAddBtn" type="button">저장</button></td>
+								</tr>
+							</c:if>
+						</tbody>
+					</table>
+					
+					<table>
+						<colgroup>
+							<col style="width: 10%;">
+							<col style="width: 65%;">
+							<col style="width: 20%;">
+							<col style="width: 5%;">
+						</colgroup>
+						<tbody id="cmtList">
+							<%-- 
+							<tr>
+								<td>이름</td>
+								<td>내용</td>
+								<td>날짜</td>
+								<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							</tr>
+							<tr>
+								<td>이름</td>
+								<td>내용</td>
+								<td>날짜</td>
+								<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							</tr>
+							<tr>
+								<td>이름</td>
+								<td>내용</td>
+								<td>날짜</td>
+								<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
+							</tr> 
+							--%>
+						</tbody>
+					</table>
+					
+				</div>
+				
 				<div id="list">
 					<div id="listTitle" class="text-left"><strong>카테고리의 글</strong></div>
 					<table>
@@ -80,7 +131,12 @@
 						</colgroup>
 						
 						<tbody id="postList">
-						
+							<c:forEach items="${postList}" var="post">
+								<tr>
+									<td class="text-left"> <a href="" data-pno="${post.postNo}">${post.postTitle}</a></td>
+									<td class="text-right">${post.regDate}</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 						<!-- 
 						<tr>
@@ -118,17 +174,29 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		fetchList();
+		var postNo = $("a[data-pno]").first().data("pno");
+		
+		if(postNo != undefined) {
+			renderView(postNo);
+			
+		}
+		else{
+			$("#postTitle").html("<strong>등록된 글이 없습니다.</strong>");
+			$("#postTitle").attr("data-pno","0");
+			$("#postDate").html("");
+			$("#post").html("");
+			$("#postNick").html("");
+		}
 	});
 	
 	$("#postList").on("click", "a" ,function(){
-		console.log($(this).data("pno"));
-		
 		var postNo = $(this).data("pno");
 		renderView(postNo);
 		return false;
 	});
+
 	
+	/*
 	$(".cateListClass").on("click", function(){
 		var cateNo = $(this).data("cno");
 		console.log(cateNo);
@@ -137,14 +205,64 @@
 		
 		return false;
 	});
+	*/
 	
+	$("#cmtAddBtn").on("click", function(){
+		var postNo = $("#postTitle").data("pno");;
+		var userNo = '<c:out value="${authUser.userNo}"/>';
+		var cmtContent = $("#cmtContent").val();
+		
+		var commentsVo = {
+			postNo : postNo,
+			userNo : userNo,
+			cmtContent : cmtContent
+		};
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comments/add",
+			type : "post",
+			data : commentsVo,
+			dataType: "json",
+			success : function(comments){
+				console.log(comments);
+				renderCmt(comments,"prepend");
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+		
+	});
 	
+	$("#cmtList").on("click", ".cmtDel" ,function(){
+		var cmtNo = $(this).data("cmtno");
+		console.log("삭제 "+cmtNo);
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comments/remove",
+			type : "post",
+			data : {cmtNo : cmtNo},
+			dataType: "json",
+			success : function(result){
+				console.log(result);
+				if(result = "success"){
+					$("#cmt"+cmtNo).remove();	
+				}
+				else{
+					alert("삭제 실패");
+				}
+				
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+		
+	});
 	
+	/*
 	function fetchList( cateNo = $(".cateListClass").first().data("cno"), changeCate = false ){
 		var id = '<c:out value="${blogUser.id}"/>';
-		//var cateNo = $(".cateListClass").first().data("cno");
-		//console.log(id);
-		//console.log(cateNo);
 		
 		if(changeCate){ // 카테고리 변경 시 포스트리스트 초기화
 			$("#postList").html("");
@@ -174,6 +292,7 @@
 				}
 				else{
 					$("#postTitle").html("<strong>등록된 글이 없습니다.</strong>");
+					$("#postTitle").attr("data-pno","0");
 					$("#postDate").html("");
 					$("#post").html("");
 					$("#postNick").html("");
@@ -186,7 +305,8 @@
 		});
 		
 	}
-	
+	*/
+	/*
 	function render(post){
 		var str  = '';
 			str += '<tr>';
@@ -196,7 +316,7 @@
 		
 		$("#postList").append(str);
 	}
-	
+	*/
 	function renderView(postNo){
 		$.ajax({
 			url: "${pageContext.request.contextPath}/post/read",
@@ -204,17 +324,56 @@
 			data : {postNo: postNo},
 			dataType: "json",
 			success : function(post){
-				console.log(post.postTitle);
-				console.log(post.regDate);
 				$("#postTitle").html("<strong>"+post.postTitle+"</strong>");
+				$("#postTitle").attr("data-pno",postNo);
 				$("#postDate").html("<strong>"+post.regDate+"</strong>");
 				$("#post").html(post.postContent);
-				
+				fetchCmt(postNo);
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : " + error);
 			}
 		});
+	}
+	
+	function fetchCmt(postNo){
+		//var postNo = $("#postTitle").data("pno");
+		console.log("postNo : "+postNo);
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comments/list",
+			type : "post",
+			data : {postNo: postNo},
+			dataType: "json",
+			success : function(commentsList){
+				$("#cmtList").html("");
+				for(var cmt of commentsList){
+					renderCmt(cmt);
+				}
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+	}
+	
+	function renderCmt(cmt, direction = "append"){
+		
+		var userNo = '<c:out value="${authUser.userNo}"/>';
+		var str  = '';
+			str += '<tr id="cmt'+cmt.cmtNo+'">';
+			str += '	<td>'+cmt.userName+'</td>';
+			str += '	<td>'+cmt.cmtContent+'</td>';
+			str += '	<td>'+cmt.regDate+'</td>';
+			if(userNo == cmt.userNo){
+				str += '<td><img class="cmtDel" data-cmtno="'+cmt.cmtNo+'" src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>';
+			}
+			str += '</tr>';
+		
+		if(direction == "append")
+			$("#cmtList").append(str);
+		else
+			$("#cmtList").prepend(str);
 	}
 	
 </script>

@@ -26,7 +26,8 @@
 			<!-- //admin-menu -->
 			
 			<div id="admin-content">
-				<form action="" method="">
+				<form action="${pageContext.request.contextPath}/post/add" method="post">
+					<input type="hidden" name="id" value="${blogUser.id}">
 			      	<table id="admin-write">
 			      		<colgroup>
 							<col style="width: 100px;">
@@ -41,8 +42,11 @@
 				      		<td>
 				      			<select name="cateNo">
 				      				<!-- 카테고리 리스트 영역 -->
-				      				<option value="">자바프로그래밍</option>
-				      				<option value="">오라클</option>
+				      				<c:forEach items="${categoryList}" var="vo">
+				      					<option value="${vo.cateNo}">${vo.cateName}</option>
+				      				</c:forEach>
+				      				
+				      				
 				      				<!-- 카테고리 리스트 영역 -->
 				      			</select>
 				      		</td>
@@ -69,4 +73,6 @@
 	</div>
 	<!-- //wrap -->
 </body>
+
+
 </html>

@@ -72,6 +72,11 @@
 	$("#btnIdCheck").on("click",function(){
 		var id = $("#txtId").val();
 		
+		if(id==""){
+			alert('아이디를 입력해주세요.');
+			return false;
+		}
+		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/user/dupCheck",
 			type : "post",
@@ -81,7 +86,7 @@
 			success : function(isDup){
 				dup = isDup;
 				if(isDup){
-					$("#tdMsg").html('<span style="color:red">사용할 수 없는 아이디입니다.</span>');
+					$("#tdMsg").html('<span style="color:red">다른 아이디로 가입해주세요.</span>');
 				}
 				else{
 					$("#tdMsg").html('사용할 수 있는 아이디입니다.');

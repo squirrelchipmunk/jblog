@@ -20,7 +20,8 @@
 	<select id="selectAuthUser" parameterType="UserVo" resultType="UserVo">
 		<![CDATA[
 			select userNo,
-				   id
+				   id,
+				   userName
 			from users
 			where id = #{id} and password = #{password}
 		]]>

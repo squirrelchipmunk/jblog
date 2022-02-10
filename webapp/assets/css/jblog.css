@@ -188,6 +188,12 @@ div#footer      { color:#666 }
 #post_area #list table td {padding: 6px 5px 6px 5px; }
 
 
+/* 개인 블로그 댓글 */
+#commentsArea {width: 100%; margin: 10px 0px 5px 0px; padding: 0px 5px 3px 5px;}
+#commentsArea table{width: 100%; border-collapse: collapse; font-size: 14px; margin: 0px 0px 10px 0px; }
+#commentsArea table tr td{height: 30px;}
+#commentsArea table tr td input[type='text']{width:99% ; height: 80%;}
+
 /****************************************************************/
 /* 개인블로그 어드민 ***************************************************/
 /****************************************************************/
