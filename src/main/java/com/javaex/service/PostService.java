@@ -72,16 +72,6 @@ public class PostService {
 		// 페이지 리스트 검색
 		List<PostVo> postList = postDao.selectPageList(map);
 		
-		System.out.println("---------------------------------------------------------");
-		System.out.println("prev : "+prev);
-		System.out.println("startpageno : "+startPageBtnNo);
-		System.out.println("endpageno : "+endPageBtnNo);
-		System.out.println("next : "+next);
-		for(PostVo post : postList) {
-			System.out.println(post);
-		}
-		System.out.println("---------------------------------------------------------\n");
-		
 		// 모델 데이터
 		Map <String, Object> pMap = new HashMap<>();
 		pMap.put("prev", prev);

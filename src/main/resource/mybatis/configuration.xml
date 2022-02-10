@@ -7,6 +7,7 @@
 		<typeAlias alias="CategoryVo" type="com.javaex.vo.CategoryVo" />
 		<typeAlias alias="PostVo" type="com.javaex.vo.PostVo" />
 		<typeAlias alias="CommentsVo" type="com.javaex.vo.CommentsVo" />
+		<typeAlias alias="SearchVo" type="com.javaex.vo.SearchVo" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
@@ -14,5 +15,6 @@
 		<mapper resource="mybatis/mappers/category.xml" />
 		<mapper resource="mybatis/mappers/post.xml" />
 		<mapper resource="mybatis/mappers/comments.xml" />
+		<mapper resource="mybatis/mappers/search.xml" />
 	</mappers>
 </configuration>

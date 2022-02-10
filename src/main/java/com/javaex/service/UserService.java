@@ -56,6 +56,18 @@ public class UserService {
 			return false; // 중복아님
 	}
 
+	public void initUser() {
+		
+		for(int i=0; i<50;i++) {
+			UserVo userVo = new UserVo();
+			userVo.setId("autoid"+i);
+			userVo.setPassword("1234");
+			userVo.setUserName("이름");
+			join(userVo);
+		}
+		
+	}
+
 	
 	
 }

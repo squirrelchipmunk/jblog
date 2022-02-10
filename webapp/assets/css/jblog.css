@@ -106,8 +106,10 @@ div#footer      { color:#666 }
 
 
 /* 메인-검색결과 리스트 */
-#center-content #resultList {min-height: 500px;}
-
+#resultList {min-height: 500px; margin: 30px 5px;}
+#resultList {width: 95%; margin: 10px 0px 5px 0px; padding: 0px 5px 3px 5px;}
+#resultList table{width: 100%; border-collapse: collapse; font-size: 14px; margin: 0px 0px 10px 0px; }
+#resultList table tr td{height: 50px;}
 
 /**************************************************************************/
 /* 메인-회원가입_로그인 ***************************************************/

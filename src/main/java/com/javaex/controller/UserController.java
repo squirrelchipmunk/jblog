@@ -61,5 +61,11 @@ public class UserController {
 		return userService.dupCheck(id);
 	}
 	
+	@RequestMapping("initUser")
+	public String initUser() {
+		userService.initUser();
+		return "user/joinSuccess";
+	}
+	
 	
 }

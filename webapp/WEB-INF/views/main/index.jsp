@@ -26,17 +26,31 @@
 				<input id="rdo-title" type="radio" name="kwdOpt" value="optTitle" > 
 				
 				<label for="rdo-userName">블로거 이름</label> 
-				<input id="rdo-userName"" type="radio" name="kwdOpt" value="optName" > 
+				<input id="rdo-userName" type="radio" name="kwdOpt" value="optName" > 
 			</fieldset>
 		</form>
 		
 		<div id="resultList">
-			
-			
+			<c:forEach items="${searchList}" var="vo">
+				<table border="1">
+					<colgroup>
+						<col style="10%">
+						<col style="50%">
+						<col style="20%">
+						<col style="20%">
+					</colgroup>
+					<tr>
+						<td><img src="${pageContext.request.contextPath}/upload/${vo.logoFile}"></td>
+						<td><a href="${pageContext.request.contextPath}/${vo.id}">${vo.blogTitle}</a></td>
+						<td>${vo.userName}(${vo.id})</td>
+						<td>${vo.joinDate}</td>
+					<tr>
+				</table>
+			</c:forEach>
 		</div>
 		
 		<!-- 메인 푸터  자리-->
-	
+		<c:import url="/WEB-INF/views/includes/main-footer.jsp"></c:import>
 	
 	</div>
 	<!-- //center-content -->
