@@ -79,6 +79,7 @@
 							<col style="width: 10%;">
 						</colgroup>
 						<tbody id="cmtInput">
+							<%--  
 							<c:if test="${!empty authUser}">
 								<tr>
 									<td>${authUser.userName}</td>
@@ -86,6 +87,7 @@
 									<td><button id="cmtAddBtn" type="button">저장</button></td>
 								</tr>
 							</c:if>
+							 --%>
 						</tbody>
 					</table>
 					
@@ -186,6 +188,7 @@
 			$("#postDate").html("");
 			$("#post").html("");
 			$("#postNick").html("");
+			$("#cmtInput").html("");
 		}
 	});
 	
@@ -207,10 +210,18 @@
 	});
 	*/
 	
-	$("#cmtAddBtn").on("click", function(){
-		var postNo = $("#postTitle").data("pno");;
+
+	/*
+	★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+	attr(data-) : 변경된 값 적용 O
+	data  : 변경 x
+	★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+	*/
+	$("#cmtInput").on("click", "#cmtAddBtn" ,function(){
+		var postNo = $("#postTitle").attr("data-pno");
 		var userNo = '<c:out value="${authUser.userNo}"/>';
 		var cmtContent = $("#cmtContent").val();
+		console.log(postNo);
 		
 		var commentsVo = {
 			postNo : postNo,
@@ -318,6 +329,7 @@
 	}
 	*/
 	function renderView(postNo){
+		console.log("view "+postNo);
 		$.ajax({
 			url: "${pageContext.request.contextPath}/post/read",
 			type : "post",
@@ -337,8 +349,17 @@
 	}
 	
 	function fetchCmt(postNo){
-		//var postNo = $("#postTitle").data("pno");
-		console.log("postNo : "+postNo);
+		
+		var str  = '';
+		 	str += '<c:if test="${!empty authUser}">';
+		 	str += '	<tr>';
+		 	str += '		<td>${authUser.userName}</td>';
+		 	str += '		<td><input  id="cmtContent" type="text" name="cmtContent"></td>';
+			str += '		<td><button id="cmtAddBtn" type="button">저장</button></td>';
+			str += '	</tr>';
+			str += '</c:if>';
+		$("#cmtInput").html("");
+		$("#cmtInput").append(str);
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/comments/list",

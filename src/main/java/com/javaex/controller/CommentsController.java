@@ -22,14 +22,14 @@ public class CommentsController {
 	@ResponseBody
 	@RequestMapping("/add")
 	public CommentsVo add(@ModelAttribute CommentsVo commentsVo) {
-		
+		System.out.println(commentsVo);
 		return commentsService.add(commentsVo);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/list")
 	public List<CommentsVo> list(@RequestParam("postNo") int postNo){
-		System.out.println(commentsService.getCmtList(postNo));
+		//System.out.println(commentsService.getCmtList(postNo));
 		return commentsService.getCmtList(postNo);
 	}
 	
