@@ -1,6 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,11 +52,10 @@ public class BlogController {
 						   @RequestParam(value = "crtPage", required=false, defaultValue="1") int crtPage,
 						   Model model) {
 		List<CategoryVo> categoryList = categoryService.getCateList(id);
-		//System.out.println(blogMap);
 		model.addAttribute("categoryList",categoryList);
 		
-		List<PostVo> postList = postService.getList(id, cateNo, crtPage);
-		model.addAttribute("postList", postList);
+		Map <String, Object> pMap = postService.getList(id, cateNo, crtPage);
+		model.addAttribute("pMap", pMap);
 		
 		return "blog/blog-main";
 	}

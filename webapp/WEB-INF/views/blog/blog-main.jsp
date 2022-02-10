@@ -133,7 +133,7 @@
 						</colgroup>
 						
 						<tbody id="postList">
-							<c:forEach items="${postList}" var="post">
+							<c:forEach items="${pMap.postList}" var="post">
 								<tr>
 									<td class="text-left"> <a href="" data-pno="${post.postNo}">${post.postTitle}</a></td>
 									<td class="text-right">${post.regDate}</td>
@@ -154,16 +154,35 @@
 						
 					</table>
 					<div id="paging">
-						<ul>
-							<li><a href="">◀</a></li>
-							<li><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li><a href="">3</a></li>
-							<li><a href="">4</a></li>
-							<li><a href="">5</a></li>
-							<li><a href="">▶</a></li>
-						</ul>
-					</div>
+							<ul>
+								<c:if test="${pMap.prev}">
+									<li><a id="prevPage" href="">◀</a></li>
+								</c:if>
+								<c:forEach begin="${pMap.startPageBtnNo}" end="${pMap.endPageBtnNo}" step="1" var="page">
+									<c:choose>
+										<c:when test="${crtPage == page}">
+											<li class="active">
+												<a class="pageGo" href="">
+													${page}
+												</a>
+											</li>
+										</c:when>
+										<c:otherwise>
+											<li>
+												<a class="pageGo" href="">
+													${page}
+												</a>
+											</li>
+										</c:otherwise>
+									</c:choose>
+									
+								</c:forEach>
+								
+								<c:if test="${pMap.next}">
+									<li><a id="nextPage" href="">▶</a></li>
+								</c:if>
+								
+							</ul>
 				</div>
 				<!-- //list -->
 			</div>
@@ -280,6 +299,41 @@
 		});
 		
 	});
+	
+	$(".pageGo").on("click",function(){
+		var page = $(this).text();
+		
+		const URLSearch = new URLSearchParams(location.search);
+		var cateNo = URLSearch.get('cateNo');
+		if(cateNo == null)
+			cateNo = $(".cateListClass").first().data("cno");
+		
+		location.href = '${pageContext.request.contextPath}/${blogUser.id}?cateNo='+cateNo+'&crtPage='+page;
+		return false;
+	});
+	
+	$("#prevPage").on("click",function(){
+		const URLSearch = new URLSearchParams(location.search);
+		var cateNo = URLSearch.get('cateNo');
+		if(cateNo == null)
+			cateNo = $(".cateListClass").first().data("cno");
+		var nextPageNo = '<c:out value="${blogUser.id}"/>';
+		
+		location.href = '${pageContext.request.contextPath}/${blogUser.id}?cateNo='+cateNo+'&crtPage=${pMap.startPageBtnNo-1}';
+		return false;
+	});
+	
+	$("#nextPage").on("click",function(){
+		const URLSearch = new URLSearchParams(location.search);
+		var cateNo = URLSearch.get('cateNo');
+		if(cateNo == null)
+			cateNo = $(".cateListClass").first().data("cno");
+		var nextPageNo = '<c:out value="${blogUser.id}"/>';
+		
+		location.href = '${pageContext.request.contextPath}/${blogUser.id}?cateNo='+cateNo+'&crtPage=${pMap.endPageBtnNo+1}';
+		return false;
+	});
+	
 	
 	/*
 	function fetchList( cateNo = $(".cateListClass").first().data("cno"), changeCate = false ){

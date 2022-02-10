@@ -18,7 +18,12 @@ public class PostDao {
 	public List<PostVo> selectList(Map<String, Object> map) {
 		return sqlSession.selectList("post.selectList",map);
 	}
-
+	
+	public List<PostVo> selectPageList(Map<String, Object> map) {
+		return sqlSession.selectList("post.selectPageList",map);
+	}
+	
+	
 	public PostVo selectPost(int postNo) {
 		return sqlSession.selectOne("post.selectPost",postNo);
 	}
@@ -26,6 +31,10 @@ public class PostDao {
 	public void insert(PostVo postVo) {
 		sqlSession.insert("post.insert",postVo);
 		
+	}
+
+	public int selectTotal(int cateNo) {
+		return sqlSession.selectOne("post.selectTotal",cateNo);
 	}
 
 }
