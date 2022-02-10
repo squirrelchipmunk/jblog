@@ -3,18 +3,86 @@
 <mapper namespace="search">
 	
 	
-	<select id="selectList" parameterType="String" resultType="SearchVo">
+	<select id="selectByTitle" parameterType="Map" resultType="SearchVo">
 		<![CDATA[
-			select logoFile,
-			       blogTitle,
-			       u.userName,
-			       u.id,
-			       u.joinDate
-			from users u, blog b
-			where u.id = b.id and
-			      blogTitle like '%블%'	
+			select rt.logofile,
+			       rt.blogtitle,
+			       rt.username,
+			       rt.id,
+			       rt.joindate
+			from(            
+			    select rownum rn,
+			           ot.logofile,
+			           ot.blogtitle,
+			           ot.username,
+			           ot.id,
+			           ot.joindate
+			    from(
+			        select logoFile,
+			               blogTitle,
+			               u.userName,
+			               u.id,
+			               to_char(joinDate,'yyyy-mm-dd') joinDate
+			        from users u, blog b
+			        where u.id = b.id and
+			              blogTitle like '%' ||  #{keyword} || '%'
+			              order by joinDate desc
+			    ) ot
+			) rt
+			where rn >= #{startRnum} and rn <= #{endRnum}
+			      
 		]]>
 	</select>
 	
+	<select id="selectByName" parameterType="Map" resultType="SearchVo">
+		<![CDATA[
+			select rt.logofile,
+			       rt.blogtitle,
+			       rt.username,
+			       rt.id,
+			       rt.joindate
+			from(            
+			    select rownum rn,
+			           ot.logofile,
+			           ot.blogtitle,
+			           ot.username,
+			           ot.id,
+			           ot.joindate
+			    from(
+			        select logoFile,
+			               blogTitle,
+			               u.userName,
+			               u.id,
+			               to_char(joinDate,'yyyy-mm-dd') joinDate
+			        from users u, blog b
+			        where u.id = b.id and
+			              userName like '%' ||  #{keyword} || '%'
+			              order by joinDate desc
+			    ) ot
+			) rt
+			where rn >= #{startRnum} and rn <= #{endRnum}
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectByTitleTotal" parameterType="String" resultType="int">
+		<![CDATA[
+			select count(*)
+			from users u, blog b
+			where u.id = b.id and
+			      blogTitle like '%' ||  #{keyword} || '%'
+		]]>
+	</select>
+	
+	
+	<select id="selectByNameTotal" parameterType="String" resultType="int">
+		<![CDATA[
+			select count(*)
+			from users u, blog b
+			where u.id = b.id and
+			      userName like '%' ||  #{keyword} || '%'
+		]]>
+	</select>
 
 </mapper>

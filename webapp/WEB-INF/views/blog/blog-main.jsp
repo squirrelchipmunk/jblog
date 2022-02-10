@@ -160,7 +160,7 @@
 								</c:if>
 								<c:forEach begin="${pMap.startPageBtnNo}" end="${pMap.endPageBtnNo}" step="1" var="page">
 									<c:choose>
-										<c:when test="${crtPage == page}">
+										<c:when test="${param.crtPage == page}">
 											<li class="active">
 												<a class="pageGo" href="">
 													${page}
@@ -183,6 +183,8 @@
 								</c:if>
 								
 							</ul>
+					</div>
+					
 				</div>
 				<!-- //list -->
 			</div>

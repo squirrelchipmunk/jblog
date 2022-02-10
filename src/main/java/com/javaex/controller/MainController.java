@@ -1,6 +1,6 @@
 package com.javaex.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javaex.service.SearchService;
-import com.javaex.vo.SearchVo;
 
 @Controller
 public class MainController {
@@ -23,11 +22,13 @@ public class MainController {
 	}
 
 	@RequestMapping("/search")
-	public String search(Model model, @RequestParam(value = "query", required=false,  defaultValue="") String query){
-		List<SearchVo> searchList = searchService.Search(query);
-		model.addAttribute("searchList",searchList);
+	public String search(Model model,
+						 @RequestParam(value = "keyword", required=false,  defaultValue="") String keyword,
+						 @RequestParam(value = "kwdOpt", required=false, defaultValue="optTitle") String kwdOpt,
+						 @RequestParam(value = "crtPage", required=false, defaultValue="1") int crtPage){
+		Map<String, Object> pMap = searchService.Search(keyword, kwdOpt, crtPage);
+		model.addAttribute("pMap",pMap);
 		
-		System.out.println(searchList);
 		return "main/index";
 	}
 	

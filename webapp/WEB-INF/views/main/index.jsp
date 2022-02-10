@@ -15,7 +15,7 @@
 		<!--메인 해더 자리 -->
 		<c:import url="/WEB-INF/views/includes/main-header.jsp"></c:import>
 		
-		<form id="search-form">
+		<form id="search-form" action="${pageContext.request.contextPath}/search" method="get">
 			<fieldset>
 				<input type="text" name="keyword" >
 				<button id="btnSearch" type="submit" >검색</button>
@@ -30,14 +30,15 @@
 			</fieldset>
 		</form>
 		
+		
 		<div id="resultList">
-			<c:forEach items="${searchList}" var="vo">
-				<table border="1">
+			<c:forEach items="${pMap.searchList}" var="vo">
+				<table class="" border="1">
 					<colgroup>
-						<col style="10%">
-						<col style="50%">
-						<col style="20%">
-						<col style="20%">
+						<col style="width:10%">
+						<col style="width:50%">
+						<col style="width:20%">
+						<col style="width:20%">
 					</colgroup>
 					<tr>
 						<td><img src="${pageContext.request.contextPath}/upload/${vo.logoFile}"></td>
@@ -48,6 +49,39 @@
 				</table>
 			</c:forEach>
 		</div>
+		
+		<c:if test="${!empty pMap}">
+			<div id="searchPaging" class="clearfix">
+				<ul>
+					<c:if test="${pMap.prev}">
+						<li><a href="${pageContext.request.contextPath}/search?keyword=${param.keyword}&crtPage=${pMap.startPageBtnNo-1}">◀</a></li>
+					</c:if>
+					<c:forEach begin="${pMap.startPageBtnNo}" end="${pMap.endPageBtnNo}" step="1" var="page">
+						<c:choose>
+							<c:when test="${param.crtPage == page}">
+								<li class="active">
+									<a href="${pageContext.request.contextPath}/search?keyword=${param.keyword}&crtPage=${page}">
+										${page}
+									</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li>
+									<a href="${pageContext.request.contextPath}/search?keyword=${param.keyword}&crtPage=${page}">
+										${page}
+									</a>
+								</li>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					
+					<c:if test="${pMap.next}">
+						<li><a href="${pageContext.request.contextPath}/search?keyword=${param.keyword}&crtPage=${pMap.endPageBtnNo+1}">▶</a></li>
+					</c:if>
+				</ul>
+			</div>
+		</c:if>
+		
 		
 		<!-- 메인 푸터  자리-->
 		<c:import url="/WEB-INF/views/includes/main-footer.jsp"></c:import>
