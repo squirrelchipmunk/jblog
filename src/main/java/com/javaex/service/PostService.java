@@ -19,7 +19,7 @@ public class PostService {
 	@Autowired
 	private CategoryDao categoryDao;
 
-	public List<PostVo> getList(String id, int cateNo) {
+	public List<PostVo> getList(String id, int cateNo, int crtPage) {
 		if(cateNo == 0) {
 			cateNo = categoryDao.selectRecentCateNo(id);
 		}

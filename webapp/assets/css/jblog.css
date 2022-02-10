@@ -187,6 +187,22 @@ div#footer      { color:#666 }
 #post_area #list table tr {border-bottom: 1px solid #B7B7B7; }
 #post_area #list table td {padding: 6px 5px 6px 5px; }
 
+/* 게시판 페이징 */
+#paging {
+	margin: 0px auto;
+	width: 310px;
+}
+
+#paging ul {margin: 10px 5px 10px 5px;}
+#paging ul>li{
+	float: left;
+	margin: 0px 8px 0px 8px;
+}
+
+#paging ul>li.active{
+	font-size: 14px;
+	font-weight: bold;
+}
 
 /* 개인 블로그 댓글 */
 #commentsArea {width: 100%; margin: 10px 0px 5px 0px; padding: 0px 5px 3px 5px;}

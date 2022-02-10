@@ -48,12 +48,13 @@ public class BlogController {
 	@RequestMapping("")
 	public String blogMain(@PathVariable("id") String id,
 						   @RequestParam(value = "cateNo", required=false, defaultValue="0") int cateNo,
+						   @RequestParam(value = "crtPage", required=false, defaultValue="1") int crtPage,
 						   Model model) {
 		List<CategoryVo> categoryList = categoryService.getCateList(id);
 		//System.out.println(blogMap);
 		model.addAttribute("categoryList",categoryList);
 		
-		List<PostVo> postList = postService.getList(id, cateNo);
+		List<PostVo> postList = postService.getList(id, cateNo, crtPage);
 		model.addAttribute("postList", postList);
 		
 		return "blog/blog-main";
