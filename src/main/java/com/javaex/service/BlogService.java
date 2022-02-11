@@ -1,11 +1,9 @@
 package com.javaex.service;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -15,10 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.javaex.dao.BlogDao;
-import com.javaex.dao.CategoryDao;
 import com.javaex.dao.UserDao;
 import com.javaex.vo.BlogVo;
-import com.javaex.vo.CategoryVo;
 import com.javaex.vo.UserVo;
 
 
@@ -31,8 +27,6 @@ public class BlogService {
 	@Autowired
 	private BlogDao blogDao;
 	
-	@Autowired
-	private CategoryDao categoryDao;
 	
 	public UserVo getBlogUser(String id) {
 		/* 블로그 user 가져오기 */
@@ -46,9 +40,9 @@ public class BlogService {
 	public boolean adminChk(String id, HttpSession session) {
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null || !id.equals(authUser.getId()))
-			return true;
-		else
 			return false;
+		else
+			return true;
 	}
 
 	public void modify(String id, MultipartFile file, BlogVo blogVo) {
@@ -60,7 +54,19 @@ public class BlogService {
 		
 		 // 파일이 선택되면 
 		if(fileSize > 0) {
+			
 			String saveDir = "C:\\javaStudy\\upload";
+			
+			// 기존 파일 삭제
+			final String defaultLogo = "spring-logo.jpg";
+			BlogVo LogoVo = blogDao.selectBlog(id);
+			String existingLogo = LogoVo.getLogoFile();
+			
+			if(!existingLogo.equals(defaultLogo)) { // 기본 이미지가 아닐 때 삭제
+				String path = saveDir+"\\"+existingLogo;
+				File delFile = new File(path);
+				delFile.delete();
+			}
 			
 			//원본파일 이름
 			String orgName = file.getOriginalFilename();

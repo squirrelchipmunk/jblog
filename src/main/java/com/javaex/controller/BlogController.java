@@ -67,7 +67,7 @@ public class BlogController {
 	public String adminBasic(@PathVariable("id") String id,
 							 Model model,
 							 HttpSession session) {
-		if(blogService.adminChk(id, session)) {
+		if(!blogService.adminChk(id, session)) {
 			return "error/403";
 		}
 		
@@ -90,7 +90,7 @@ public class BlogController {
 	public String adminCategory(@PathVariable("id") String id,
 								HttpSession session) {
 		
-		if(blogService.adminChk(id, session)) {
+		if(!blogService.adminChk(id, session)) {
 			return "error/403";
 		}
 		return "blog/admin/blog-admin-cate";
@@ -100,7 +100,7 @@ public class BlogController {
 	public String adminWriteForm(@PathVariable("id") String id,
 								 HttpSession session,
 							 	 Model model) {
-		if(blogService.adminChk(id, session)) {
+		if(!blogService.adminChk(id, session)) {
 			return "error/403";
 		}
 		
