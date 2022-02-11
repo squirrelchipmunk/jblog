@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,9 +41,15 @@ public class BlogService {
 	
 	public BlogVo getBlog(String id) {
 		return blogDao.selectBlog(id);
-		
 	}
 	
+	public boolean adminChk(String id, HttpSession session) {
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null || !id.equals(authUser.getId()))
+			return true;
+		else
+			return false;
+	}
 
 	public void modify(String id, MultipartFile file, BlogVo blogVo) {
 		
