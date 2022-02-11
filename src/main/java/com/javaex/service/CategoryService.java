@@ -16,12 +16,6 @@ public class CategoryService {
 
 	public List<CategoryVo> getCateList(String id) {
 		
-		
-		/* 블로그 정보 가져오기(title, logo) */
-		//BlogVo blogVo = blogDao.selectBlog(id);
-		//System.out.println(blogVo);
-		//blogMap.put("blogVo", blogVo);
-		
 		/* 카테고리 리스트 */
 		return categoryDao.selectCateList(id);
 	}

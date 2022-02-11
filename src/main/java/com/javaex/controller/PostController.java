@@ -19,18 +19,6 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 	
-	/*
-	@ResponseBody
-	@RequestMapping("/list")
-	public List<PostVo> list(@RequestParam("id")String id,
-							 @RequestParam("cateNo")int cateNo){
-		System.out.println(id);
-		System.out.println(cateNo);
-		
-		List<PostVo> list = postService.getList(id, cateNo);
-		return list;
-	}*/
-	
 	@ResponseBody
 	@RequestMapping("/read")
 	public PostVo read(@RequestParam("postNo") int postNo){

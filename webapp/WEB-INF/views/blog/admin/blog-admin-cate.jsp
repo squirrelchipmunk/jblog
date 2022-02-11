@@ -47,17 +47,6 @@
 		      		</thead>
 		      		<tbody id="cateList">
 		      			<!-- 리스트 영역 -->
-						<%-- <c:forEach items="${categoryList}" var="vo">
-							<tr id="tr${vo.cateNo}">
-								<td>${vo.cateNo}</td>
-								<td>${vo.cateName}</td>
-								<td>${vo.postNum}</td>
-								<td>${vo.description}</td>
-							    <td class='text-center'>
-							    	<img class="btnCateDel" data-cno="${vo.cateNo}" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-							    </td>
-							</tr>
-						</c:forEach> --%>
 					</tbody>
 				</table>
       	

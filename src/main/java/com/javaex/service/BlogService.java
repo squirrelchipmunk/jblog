@@ -47,10 +47,6 @@ public class BlogService {
 		
 		blogVo.setId(id);
 		
-		
-		//System.out.println(file);
-		//System.out.println(file.getSize());
-		
 		//파일 사이즈
 		long fileSize = file.getSize();
 		

@@ -3,6 +3,8 @@ package com.javaex.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +20,6 @@ import com.javaex.service.CategoryService;
 import com.javaex.service.PostService;
 import com.javaex.vo.BlogVo;
 import com.javaex.vo.CategoryVo;
-import com.javaex.vo.PostVo;
 import com.javaex.vo.UserVo;
 
 @Controller
@@ -44,7 +45,6 @@ public class BlogController {
 	}
 	
 	
-	
 	/* 블로그 메인 */
 	@RequestMapping("")
 	public String blogMain(@PathVariable("id") String id,
@@ -60,26 +60,26 @@ public class BlogController {
 		return "blog/blog-main";
 	}
 	
-	/*
-	@RequestMapping("/list")
-	public String list(@PathVariable("id") String id,
-					   @RequestParam("cateNo") int cateNo,
-					   Model model){
-		System.out.println(id);
-		System.out.println(cateNo);
-		
-		List<PostVo> postList = postService.getList(id, cateNo);
-		model.addAttribute("postList", postList);
-		
-		return "blog/blog-main";
-	}
-	*/
-	
 	
 	/*  admin 페이지  */
+	
+	public boolean adminChk(String id, HttpSession session) {
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null || !id.equals(authUser.getId()))
+			return true;
+		else
+			return false;
+		
+	}
+	
 	@RequestMapping("/admin/basic")
 	public String adminBasic(@PathVariable("id") String id,
-							 Model model) {
+							 Model model,
+							 HttpSession session) {
+		if(adminChk(id, session)) {
+			return "error/403";
+		}
+		
 		BlogVo blogVo = blogService.getBlog(id);
 		model.addAttribute("blogVo",blogVo);
 		
@@ -96,13 +96,23 @@ public class BlogController {
 	}
 	
 	@RequestMapping("/admin/category")
-	public String adminCategory() {
+	public String adminCategory(@PathVariable("id") String id,
+								HttpSession session) {
+		
+		if(adminChk(id, session)) {
+			return "error/403";
+		}
 		return "blog/admin/blog-admin-cate";
 	}
 	
 	@RequestMapping("/admin/writeForm")
 	public String adminWriteForm(@PathVariable("id") String id,
+								 HttpSession session,
 							 	 Model model) {
+		if(adminChk(id, session)) {
+			return "error/403";
+		}
+		
 		List<CategoryVo> categoryList = categoryService.getOptCateList(id);
 		model.addAttribute("categoryList", categoryList);
 		return "blog/admin/blog-admin-write";
