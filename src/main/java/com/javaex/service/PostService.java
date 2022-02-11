@@ -84,7 +84,10 @@ public class PostService {
 	}
 
 	public PostVo read(int postNo) {
-		return postDao.selectPost(postNo);
+		PostVo postVo = postDao.selectPost(postNo);
+		postVo.setPostTitle(postVo.getPostTitle().replace(" ","&nbsp;"));
+		postVo.setPostContent(postVo.getPostContent().replace(" ","&nbsp;").replace("\n", "<br>"));
+		return postVo;
 	}
 
 	public void add(PostVo postVo) {

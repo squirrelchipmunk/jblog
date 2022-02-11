@@ -38,7 +38,6 @@ public class SearchService {
 			totalCnt = searchDao.selectByTitleTotal(keyword);
 		else
 			totalCnt = searchDao.selectByNameTotal(keyword);
-		System.out.println(totalCnt);
 		
 		//-페이지당 버튼 갯수
 		final int pageBtnCount = 5;
