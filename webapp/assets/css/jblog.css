@@ -108,7 +108,7 @@ div#footer      { color:#666 }
 /* 메인-검색결과 리스트 */
 #searchArea{text-align:center;}
 
-#resultList {min-height: 400px; margin: 20px 0px 0px 0px; width: 98%; padding: 0px 0px;}
+#resultList {min-height: 500px; margin: 20px 0px 0px 0px; width: 98%; padding: 0px 0px;}
 #resultList table{width: 100%; border-collapse: collapse; font-size: 14px; margin: 0px 0px 10px 0px; }
 #resultList table tr td{height: 50px;}
 #resultList table tr td img{height: 50px;}
